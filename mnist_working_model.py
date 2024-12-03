@@ -4,34 +4,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
+from torchsummary import summary
 from tqdm import tqdm
-
-use_cuda = torch.cuda.is_available()
-device = torch.device("cuda" if use_cuda else "cpu")
-
-
-torch.manual_seed(1)
-batch_size = 128
-
-kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
-train_loader = torch.utils.data.DataLoader(
-    datasets.MNIST('../data', train=True, download=True,
-                    transform=transforms.Compose([
-                        transforms.RandomRotation(degrees=10),  # Rotate by up to 10 degrees
-                        transforms.RandomAffine(degrees=0, shear=5),  # Shear by up to 5 degrees
-                        # transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  # Add perspective transform
-                        # transforms.ColorJitter(brightness=0.2),  # Add slight brightness variation
-                        transforms.ToTensor(),
-                        transforms.Normalize((0.1307,), (0.3081,))
-                    ])),
-    batch_size=batch_size, shuffle=True, **kwargs)
-test_loader = torch.utils.data.DataLoader(
-    datasets.MNIST('../data', train=False, transform=transforms.Compose([
-                        transforms.ToTensor(),
-                        transforms.Normalize((0.1307,), (0.3081,))
-                    ])),
-    batch_size=batch_size, shuffle=True, **kwargs)
-
 
 class MNIST_CNN_Second(nn.Module):
     def __init__(self):
@@ -137,8 +111,39 @@ def test(model, device, test_loader):
     return test_loss, test_accuracy
 
 if __name__ == "__main__":
+    
+    use_cuda = torch.cuda.is_available()
+    device = torch.device("cuda" if use_cuda else "cpu")
 
+    print(f"Using device: {device}")
+
+    ## Loading Training and Testing Data
+    torch.manual_seed(1)
+    batch_size = 128
+
+    kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
+    train_loader = torch.utils.data.DataLoader(
+        datasets.MNIST('../data', train=True, download=True,
+                        transform=transforms.Compose([
+                            transforms.RandomRotation(degrees=10),  # Rotate by up to 10 degrees
+                            transforms.RandomAffine(degrees=0, shear=5),  # Shear by up to 5 degrees
+                            # transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  # Add perspective transform
+                            # transforms.ColorJitter(brightness=0.2),  # Add slight brightness variation
+                            transforms.ToTensor(),
+                            transforms.Normalize((0.1307,), (0.3081,))
+                        ])),
+        batch_size=batch_size, shuffle=True, **kwargs)
+    test_loader = torch.utils.data.DataLoader(
+        datasets.MNIST('../data', train=False, transform=transforms.Compose([
+                            transforms.ToTensor(),
+                            transforms.Normalize((0.1307,), (0.3081,))
+                        ])),
+        batch_size=batch_size, shuffle=True, **kwargs)
+
+    ## Initializing Model, Optimizer and Scheduler
     model = MNIST_CNN_Second().to(device)
+    print("Model Summary:")
+    print(summary(model, (1, 28, 28)))
 
     optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=0.0001)
     scheduler = optim.lr_scheduler.OneCycleLR(
