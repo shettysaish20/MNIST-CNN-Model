@@ -1,8 +1,20 @@
 # MNIST CNN Model Architecture- TSAI ERA V3 Session 6 Assignment
 
+![Build Status](https://github.com/shettysaish20/MNIST-CNN-Model/workflows/Model%20Architecture%20Checks/badge.svg)
+
 This repository contains a CNN model implementation for the MNIST dataset with specific architectural requirements and constraints.
 
 ## Model Architecture
+
+### Conceptual Understanding
+
+Before starting with the model, I took time to understand the components of CNN and built a conceptual architecture of the model in excel, as shown by Rohan sir in the session.
+
+![Conceptual Architecture](model_building.png)
+
+The parameter counts are not accurate, but it gives a good understanding of the model.
+
+### Final Model Architecture
 
 The CNN model is structured with the following key components:
 
@@ -50,12 +62,14 @@ Params size (MB): 0.07
 Estimated Total Size (MB): 1.63
 ----------------------------------------------------------------
 ```
+
 ### Key Components
 
 ✅ **Architectural Features**:
 - Batch Normalization layers for training stability
 - Dropout layers for regularization
 - Fully Connected/Global Average Pooling for final classification
+- OneCycleLR scheduler for optimized learning rate control
 
 ### Model Statistics
 
@@ -66,11 +80,11 @@ The model includes:
 
 ## Testing Result logs
 
-This model is trained and tested in the mnist_working_model.py file. 
+This model is trained and tested in the `mnist_working_model.py` file. 
 
-An accuracy of 99.53% was achieved on the test dataset in 17 epochs.
+An accuracy of **99.53%** was achieved on the test dataset in **17** epochs. Early stopping was used to prevent overfitting.
 
-![Training Results](First_Target_Achieved_Results.png)
+![Training Results](testing_logs.png)
 
 ## Requirements
 The CNN model has been successfully built with the following requirements:
@@ -79,7 +93,7 @@ The CNN model has been successfully built with the following requirements:
 - Number of Epochs: (<20) : 17 ✅
 - Have used Batch Normalization ✅
 - Have used Dropout ✅
-- Have used both FC Layer or GAP for final classification ✅   
+- Have used FC Layer or GAP for final classification ✅   
 
 ## Quality Checks
 
@@ -105,3 +119,16 @@ This will verify all architectural requirements and display the results.
 - torch
 - torchvision
 - Additional dependencies in `requirements.txt`
+
+## GitHub Actions
+
+This project uses GitHub Actions for automated validation of the model architecture. The workflow is triggered on:
+
+- Push events to `mnist_working_model.py`, `model_checks.py`, or workflow files
+- Pull requests affecting model files
+- Manual workflow dispatch
+
+The workflow:
+1. Sets up Python 3.8 environment
+2. Installs required dependencies
+3. Runs model architecture validation checks
