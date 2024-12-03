@@ -1,0 +1,5 @@
+test_files/
+*.ipynb
+*.pyc
+*.pyc~
+*.ipynb~
