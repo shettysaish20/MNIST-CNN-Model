@@ -32,7 +32,12 @@ def check_model():
     if not (has_fc or has_gap):
         print('❌ Error: Model does not use either Fully Connected Layer or Global Average Pooling')
         sys.exit(1)
-    print('✅ Model uses FC Layer or GAP')
+    elif has_gap:
+        print('✅ Model uses GAP')
+    elif has_fc:
+        print('✅ Model uses FC Layer')
+    else:
+        print('✅ Model uses FC Layer or GAP')
 
 if __name__ == '__main__':
     check_model() 
