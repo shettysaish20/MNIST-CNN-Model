@@ -4,9 +4,14 @@ on:
   push:
     paths:
       - 'mnist_working_model.py'
+      - 'model_checks.py'
+      - '.github/workflows/model_checks.yml'
   pull_request:
     paths:
       - 'mnist_working_model.py'
+      - 'model_checks.py'
+      - '.github/workflows/model_checks.yml'
+  workflow_dispatch:
 
 jobs:
   model-checks:
